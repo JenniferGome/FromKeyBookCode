@@ -7,7 +7,7 @@ import { Book } from '../Models/Book';
 })
 export class BookService {
 
-  apiURL: String = 'https://key-code-b.herokuapp.com';
+  apiURL: String = 'https://keycode-book-fron.herokuapp.com';
 
   constructor(
     private http: HttpClient
@@ -16,4 +16,13 @@ export class BookService {
   createBook(formData){
     return this.http.post<Book>(`${this.apiURL}/book/create`, formData)
   }
+
+  getAll(){
+    return this.http.get(`${this.apiURL}/book/getAll`)
+  }
+
+  updateBook(formData, idBook){
+    return this.http.put<Book>(`${this.apiURL}/book/update/${idBook}`, formData)
+  }
 }
+

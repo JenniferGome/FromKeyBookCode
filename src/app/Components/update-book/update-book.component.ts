@@ -1,25 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { BookService } from '../../Services/book.service';
 import { GenreService } from '../../Services/genre.service';
+import * as moment from 'moment';
 
 @Component({
-  selector: 'app-create-book',
-  templateUrl: './create-book.component.html',
-  styleUrls: ['./create-book.component.css']
+  selector: 'app-update-book',
+  templateUrl: './update-book.component.html',
+  styleUrls: ['./update-book.component.css']
 })
-export class CreateBookComponent implements OnInit {
+export class UpdateBookComponent implements OnInit {
 
   createBookForm: FormGroup
   allGenre: any
   genreBook: Array<any> = []
+  idBook: String
 
   constructor(
     private formBuilder: FormBuilder,
     private bookService: BookService,
     private genreService: GenreService,
     private router: Router,
+    private routeParams: ActivatedRoute
   ) {
     this.getGenre()
     this.validator()
@@ -29,21 +32,32 @@ export class CreateBookComponent implements OnInit {
   }
 
   validator(){
+    this.idBook = this.routeParams.snapshot.paramMap.get('id')
+    let storageBook = localStorage.getItem(`book-${this.idBook}`)
+    let dataBook = JSON.parse(storageBook)
+
+    /** Se guardan los generos que tiene el libro en la variable genreBook  */
+    dataBook.genre.forEach(genre => {
+        this.genreBook.push(genre._id)
+    });
+
+    const date = moment(dataBook.publicationDate).format('YYYY-MM-DD')
+
     this.createBookForm = this.formBuilder.group({
-      name: ['', Validators.required],
-      author: ['', Validators.required],
-      pageNumber: [''],
-      publisher: ['', Validators.required],
-      publicationDate: ['', Validators.required],
-      genre: ['', Validators.required]
+      name: [dataBook.name, Validators.required],
+      author: [dataBook.author, Validators.required],
+      pageNumber: [dataBook.pageNumber],
+      publisher: [dataBook.publisher, Validators.required],
+      publicationDate: [date, Validators.required],
+      genre: [this.genreBook, Validators.required]
     })
   }
 
   saveBook(){
     if (this.createBookForm.valid){
-      this.bookService.createBook(this.createBookForm.value).subscribe(
+      this.bookService.updateBook(this.createBookForm.value, this.idBook).subscribe(
         (bookCreated) => {
-          alert('El libro se creó correctamente')
+          alert('El libro se modificó correctamente')
           this.router.navigate(['/'])
         },
         (error) => {

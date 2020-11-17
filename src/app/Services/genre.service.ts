@@ -7,7 +7,7 @@ import { Genre } from '../Models/Genre';
 })
 export class GenreService {
 
-  apiURL: String = 'https://key-code-b.herokuapp.com';
+  apiURL: String = 'https://keycode-book-fron.herokuapp.com';
 
   constructor(
     private http: HttpClient
