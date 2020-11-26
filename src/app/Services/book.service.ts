@@ -24,5 +24,9 @@ export class BookService {
   updateBook(formData, idBook){
     return this.http.put<Book>(`${this.apiURL}/book/update/${idBook}`, formData)
   }
+
+  deleteBook(id){
+    return this.http.delete(`${this.apiURL}/book/deleteOne${id}`)
+  }
 }
 

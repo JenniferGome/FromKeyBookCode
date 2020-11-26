@@ -14,7 +14,7 @@ describe('LoginComponent', () => {
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(LoginComponent);
+    fixture = TestBed.createComponent(Component);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

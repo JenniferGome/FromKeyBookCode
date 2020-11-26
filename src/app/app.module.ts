@@ -1,8 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-/**
- * Routes => Me permite crear una constante de tipo Routes
- */
+
 import { Routes, RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -23,9 +21,8 @@ import { UpdateBookComponent } from './Components/update-book/update-book.compon
 const routesApp: Routes = [
   { path: '', component: HomeComponent },
   { path: 'sign-up', component: SignUpComponent },
-  { path: 'login', component: LoginComponent },
   { path: 'create-book', canActivate: [AuthGuard], data: {only: 'Admin'}, component: CreateBookComponent },
-  { path: 'list-book', canActivate: [AuthGuard], component: ListBookComponent },
+  { path: 'list-book', canActivate: [AuthGuard], data:{only: ['Admin', 'User']}, component: ListBookComponent },
   { path: 'create-genre', canActivate: [AuthGuard], data: {only: 'Admin'}, component: CreateGenreComponent  },
   { path: 'update-book/:id', canActivate: [AuthGuard], data: {only: 'Admin'}, component: UpdateBookComponent }
 ]
